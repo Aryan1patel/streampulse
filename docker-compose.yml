@@ -1,0 +1,147 @@
+version: '3.8'
+services:
+
+  # -------------------------------------------------------
+  # 🚀 REDPANDA (Kafka Replacement – ARM compatible)
+  # -------------------------------------------------------
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.2.13
+    container_name: streampulse-redpanda
+    command:
+      - redpanda
+      - start
+      - --smp 1
+      - --overprovisioned
+      - --node-id 0
+      - --check=false
+      - --kafka-addr=PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr=PLAINTEXT://redpanda:9092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "info"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+  # -------------------------------------------------------
+  # 🗄 POSTGRES — Metadata / Company DB
+  # -------------------------------------------------------
+  postgres:
+    image: postgres:14
+    container_name: streampulse-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: streampulse
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # -------------------------------------------------------
+  # ⚡ REDIS — Caching / Trending Feed Cache
+  # -------------------------------------------------------
+  redis:
+    image: redis:alpine
+    container_name: streampulse-redis
+    ports:
+      - "6379:6379"
+
+  # -------------------------------------------------------
+  # 🔍 QDRANT — Vector DB for Event Similarity Search
+  # -------------------------------------------------------
+  qdrant:
+    image: qdrant/qdrant
+    container_name: streampulse-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+
+
+  trending_ingestor:
+    build:
+      context: .
+      dockerfile: services/ingestors/trending_ingestor/Dockerfile
+    container_name: streampulse-trending-ingestor
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    environment:
+      - KAFKA_BOOTSTRAP=redpanda:9092
+      - KAFKA_TOPIC=trending_raw
+      - POLL_INTERVAL=30
+      - GNEWS_API_KEY=3efca6db8791fc18ce266a4801974bac
+    restart: always
+
+  normalizer:
+    build:
+      context: .
+      dockerfile: services/normalizer/Dockerfile
+    container_name: streampulse-normalizer
+    environment:
+      - KAFKA_BOOTSTRAP=redpanda:9092
+      - CONSUMER_TOPIC=trending_raw
+      - PRODUCER_TOPIC=trending_clean
+    depends_on:
+      - redpanda
+    restart: unless-stopped
+
+  api_gateway:
+    build:
+      context: .
+      dockerfile: services/api_gateway/Dockerfile
+    container_name: streampulse-api
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: streampulse
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      KAFKA_BOOTSTRAP: redpanda:9092
+    depends_on:
+      - postgres
+      - redpanda
+    restart: always
+
+  trending_store:
+    build:
+      context: .
+      dockerfile: services/trending_store/Dockerfile
+    container_name: streampulse-trending-store
+    environment:
+      - KAFKA_BOOTSTRAP=redpanda:9092
+    depends_on:
+      - redpanda
+      - postgres
+    restart: always
+
+  related_fetcher:
+    build:
+      context: .
+      dockerfile: services/related_fetcher/Dockerfile
+    container_name: streampulse-related-fetcher
+    ports:
+      - "7001:7000"
+    volumes:
+      - ./services/related_fetcher:/app/related_fetcher
+    restart: always
+
+  keyword_extractor:
+    build:
+      context: .
+      dockerfile: services/keyword_extractor/Dockerfile
+    container_name: streampulse-keyword-extractor
+    ports:
+      - "7002:7002"
+    restart: always
+
+networks:
+  default:
+    name: streampulse-network
