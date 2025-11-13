@@ -1,0 +1,6 @@
+beautifulsoup4
+readability-lxml
+kafka-python
+requests
+python-dotenv
+python-dateutil
