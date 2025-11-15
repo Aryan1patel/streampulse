@@ -1,0 +1,27 @@
+from related_fetcher.utils.request import safe_get
+from related_fetcher.utils.clean import clean_text, normalize_output
+from bs4 import BeautifulSoup
+
+def fetch_moneycontrol(query):
+    url = f"https://www.moneycontrol.com/news/tags/{query.replace(' ', '-')}.html"
+    html = safe_get(url)
+    if not html: return []
+
+    soup = BeautifulSoup(html, "lxml")
+    out = []
+
+    for a in soup.select("li.clearfix a"):
+        title = clean_text(a.get_text())
+        link = a.get("href")
+
+        if not title or not link: 
+            continue
+
+        item = normalize_output({
+            "source": "Moneycontrol",
+            "title": title,
+            "link": link
+        })
+        if item: out.append(item)
+
+    return out
