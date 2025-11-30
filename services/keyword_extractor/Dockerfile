@@ -10,6 +10,7 @@ RUN python -m spacy download en_core_web_sm
 
 COPY services/keyword_extractor /app/keyword_extractor
 COPY libs /app/libs
+COPY data /app/data
 
 ENV PYTHONPATH="/app"
 ENV PYTHONUNBUFFERED=1

@@ -108,6 +108,15 @@ IGNORED_KEYWORDS = [
     "kills wife", "love affair", "divorce", "romance",
     "wheelchair", "bag returned", "auto driver",
     "gun licence", "maoists killed", "mayor urges",
+    
+    # Local politics (not market-impacting)
+    "statue", "bust", "memorial", "portrait", "monument",
+    "protest march", "slogan", "rally", "demonstration",
+    "shivaji maharaj", "ambedkar", "gandhi statue",
+    "removal of", "sparks protest", "local protest",
+    "city protest", "municipal", "civic", "township",
+    "pilgrims", "accident", "bus accident", "road accident",
+    "tibetan", "dalai lama", "exile",
 
     # Political gossip (not market-impacting)
     "nitish kumar after", "praise for", "eyebrows",

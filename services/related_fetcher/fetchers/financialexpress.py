@@ -18,7 +18,7 @@ def fetch_financialexpress(query):
             "source": "FinancialExpress",
             "title": title,
             "link": link
-        })
+        }, query=query)
 
         if item: out.append(item)
 

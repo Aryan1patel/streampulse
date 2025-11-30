@@ -22,7 +22,7 @@ def fetch_economictimes(query):
             "source": "EconomicTimes",
             "title": title,
             "link": "https://economictimes.indiatimes.com" + link
-        })
+        }, query=query)
 
         if item: out.append(item)
 

@@ -5,3 +5,8 @@ uvicorn
 scikit-learn
 sentence-transformers
 numpy
+beautifulsoup4
+requests
+yake
+transformers
+torch

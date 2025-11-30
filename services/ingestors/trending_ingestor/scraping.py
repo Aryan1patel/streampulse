@@ -2,15 +2,145 @@
 
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, quote
 import feedparser
 import os
+import json
+import urllib.request
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) "
                   "AppleWebKit/537.36 (KHTML, like Gecko) "
                   "Chrome/117.0 Safari/537.36"
 }
+
+# API Keys
+GNEWS_API_KEY = "3efca6db8791fc18ce266a4801974bac"
+NEWSDATA_API_KEY = "pub_9aebd96f4f1e4f2cb1eb8a6b2f928aaa"
+NEWSAPI_KEY = "a46c3d6427d54778882898c2b4d85dc0"
+WORLDNEWS_API_KEY = "effecce0233f4782a4f7e34aa7e75d40"
+
+
+
+# ============================================================================
+# 🟢 0. NEWS APIs (GNews & NewsData.io)
+# ============================================================================
+def fetch_gnews_trending():
+    """Fetch trending news from GNews API"""
+    try:
+        url = f"https://gnews.io/api/v4/top-headlines?lang=en&country=in&max=10&apikey={GNEWS_API_KEY}"
+        
+        with urllib.request.urlopen(url, timeout=8) as response:
+            data = json.loads(response.read().decode("utf-8"))
+            articles = data.get("articles", [])
+            
+            return [
+                {
+                    "source": f"gnews_{article.get('source', {}).get('name', 'unknown')}",
+                    "title": article.get("title", ""),
+                    "link": article.get("url", "")
+                }
+                for article in articles if article.get("title") and article.get("url")
+            ]
+    except Exception as e:
+        print(f"❌ GNews API failed: {e}")
+        return []
+
+
+def fetch_newsdata_trending():
+    """Fetch trending news from NewsData.io API - India focus"""
+    try:
+        # Get all Indian news - filter.py will handle filtering
+        url = f"https://newsdata.io/api/1/latest?apikey={NEWSDATA_API_KEY}&country=in&language=en"
+        
+        response = requests.get(url, timeout=8)
+        if response.status_code != 200:
+            print(f"❌ NewsData API returned status {response.status_code}")
+            return []
+        
+        data = response.json()
+        articles = data.get("results", [])
+        
+        return [
+            {
+                "source": f"newsdata_{article.get('source_id', 'unknown')}",
+                "title": article.get("title", ""),
+                "link": article.get("link", "")
+            }
+            for article in articles[:10] if article.get("title") and article.get("link")
+        ]
+    except Exception as e:
+        print(f"❌ NewsData API failed: {e}")
+        return []
+
+
+def fetch_newsapi_trending():
+    """Fetch top headlines from NewsAPI - India focus"""
+    try:
+        # Get top headlines from India - all categories, filter.py will handle filtering
+        url = f"https://newsapi.org/v2/top-headlines?country=in&pageSize=20&apiKey={NEWSAPI_KEY}"
+        
+        response = requests.get(url, timeout=8)
+        if response.status_code != 200:
+            print(f"❌ NewsAPI returned status {response.status_code}")
+            return []
+        
+        data = response.json()
+        if data.get("status") != "ok":
+            print(f"❌ NewsAPI error: {data.get('message', 'Unknown error')}")
+            return []
+        
+        articles = data.get("articles", [])
+        
+        return [
+            {
+                "source": f"newsapi_{article.get('source', {}).get('name', 'unknown')}",
+                "title": article.get("title", ""),
+                "link": article.get("url", "")
+            }
+            for article in articles if article.get("title") and article.get("url")
+        ]
+    except Exception as e:
+        print(f"❌ NewsAPI failed: {e}")
+        return []
+
+
+def fetch_worldnews_trending():
+    """Fetch top news from World News API - India focus"""
+    try:
+        url = f"https://api.worldnewsapi.com/top-news?source-country=in&language=en&api-key={WORLDNEWS_API_KEY}"
+        
+        response = requests.get(url, timeout=8)
+        if response.status_code != 200:
+            print(f"❌ WorldNewsAPI returned status {response.status_code}")
+            return []
+        
+        data = response.json()
+        
+        # WorldNewsAPI returns {top_news: [...], language: "en"}
+        top_news = data.get("top_news", [])
+        
+        articles = []
+        for news_item in top_news[:10]:  # Get top 10
+            # Each item has: {news: [{...}, {...}]}
+            news_list = news_item.get("news", [])
+            for article in news_list:
+                title = article.get("title")
+                link = article.get("url")
+                if title and link:
+                    articles.append({
+                        "source": "worldnews_india",
+                        "title": title,
+                        "link": link
+                    })
+        
+        return articles[:10]
+    except Exception as e:
+        print(f"❌ WorldNewsAPI failed: {e}")
+        return []
+
+
+
 
 
 # ============================================================================
@@ -200,7 +330,7 @@ def fetch_india_today_breaking():
 # 🟡 6. HINDUSTAN TIMES LATEST (Politics, policy, India news)
 # ============================================================================
 def fetch_hindustan_times_latest():
-    url = "https://www.hindustantimes.com/latest-news"
+    url = "https://www.hindustantimes.com/business"
     r = requests.get(url, headers=HEADERS, timeout=10)
     r.raise_for_status()
     soup = BeautifulSoup(r.text, "lxml")

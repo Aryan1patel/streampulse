@@ -21,7 +21,7 @@ def fetch_moneycontrol(query):
             "source": "Moneycontrol",
             "title": title,
             "link": link
-        })
+        }, query=query)
         if item: out.append(item)
 
     return out
