@@ -80,17 +80,17 @@ jobs:
       - name: Start test services
         run: |
           # Start minimal services for testing
-          docker-compose up -d postgres redis
+          docker compose up -d postgres redis
           sleep 10
       
       - name: Health check
         run: |
-          docker-compose ps
+          docker compose ps
           
           # Check if postgres is ready
-          docker-compose exec -T postgres pg_isready -U user || echo "Postgres not ready"
+          docker compose exec -T postgres pg_isready -U user || echo "Postgres not ready"
       
       - name: Cleanup
         if: always()
         run: |
-          docker-compose down -v
+          docker compose down -v

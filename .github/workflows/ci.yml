@@ -77,7 +77,7 @@ jobs:
       
       - name: Build ${{ matrix.service }}
         run: |
-          docker-compose build ${{ matrix.service }}
+          docker compose build ${{ matrix.service }}
       
       - name: Verify image exists
         run: |
@@ -100,7 +100,7 @@ jobs:
       
       - name: Build services/ingestors/${{ matrix.service }}
         run: |
-          docker-compose build ${{ matrix.service }}
+          docker compose build ${{ matrix.service }}
 
   # Summary job - only passes if all jobs succeed
   ci-success:
