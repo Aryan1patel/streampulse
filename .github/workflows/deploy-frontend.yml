@@ -1,11 +1,14 @@
 name: Deploy Frontend to Vercel
 
+# Disabled until Vercel is configured
+# Uncomment the 'on:' section below when ready to deploy
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:  # Only run manually for now
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'frontend/**'
+  #     - '.github/workflows/deploy-frontend.yml'
 
 jobs:
   deploy:
