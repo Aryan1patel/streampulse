@@ -1,16 +1,9 @@
-<<<<<<< Updated upstream
-# ⚡ StreamPulse
-
-**Real-time news trend analysis & market impact visualization**
-
-=======
 <div align="center">
 
 # ⚡ StreamPulse
 
 **Real-time news trend analysis & market impact visualization**
 
->>>>>>> Stashed changes
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Python-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -23,11 +16,10 @@ StreamPulse is a **production-style streaming data platform** that ingests trend
 
 </div>
 
----
+
 
 ## 📸 Preview
 
-<<<<<<< Updated upstream
 <table>
   <tr>
     <td>
@@ -48,9 +40,6 @@ StreamPulse is a **production-style streaming data platform** that ingests trend
 </table>
 =======
 <!-- Drop your screenshot here once the app is running! -->
-> **Screenshot coming soon** — add your image path below once ready.
->>>>>>> Stashed changes
-
 <!-- Uncomment and update the path when you have a screenshot:
 ![StreamPulse Dashboard](./docs/screenshot.png)
 -->
