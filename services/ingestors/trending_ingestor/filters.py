@@ -5,7 +5,7 @@
 IMPORTANT_KEYWORDS = [
 
     # 🔥 Market indexes
-    "sensex", "nifty", "bank nifty", "dow", "nasdaq", "s&p",
+    "sensex", "nifty", "bank nifty", "dow jones", "nasdaq", "s&p 500",
     "market crash", "market falls", "market rises",
 
     # 🔥 Company events
@@ -34,7 +34,7 @@ IMPORTANT_KEYWORDS = [
     "layoffs", "fired", "job cuts", "hiring freeze",
     "salary cuts",
 
-    # 🔥 Economic indicators
+    # 🔥 Economic indicators (India specific)
     "gdp", "inflation", "cpi", "wpi",
     "recession", "slowdown", "economic growth",
     "exports", "imports", "trade deficit",
@@ -45,36 +45,22 @@ IMPORTANT_KEYWORDS = [
     "bankruptcy", "insolvency", "nbfc", "credit rating",
     "downgraded", "upgrade", "moratorium",
 
-    # 🔥 Global macro
-    "oil price", "brent", "opec", "gold prices",
-    "dollar index", "currency depreciation",
-    "bond yields", "treasury yields",
+    # 🔥 Global macro (only impactful ones)
+    "oil price", "brent crude", "opec",
+    "gold prices", "dollar index", "rupee",
+    "bond yields", "us fed", "us tariff", "us sanctions",
+    "us rate", "fed rate", "fed cut", "fed hike",
 
-    # 🔥 Geopolitics & Security
-    "war", "attack", "missile", "explosion", "blast",
-    "terrorist", "bomb",
-    "border clash", "border tension",
-    "china", "pakistan", "russia", "ukraine", "us",
-    "tariff", "trade war", "sanctions",
-    "nia", "encounter", "security threat",
-    "emergency", "curfew", "lockdown", "riot",
-    "military", "strike", "clash", "airstrike", "drone",
-    "missile launch", "evacuation", "embassy",
-    "hostage", "ceasefire", "terror attack",
-
-    # 🔥 Technology & AI
-    "ai", "chip", "semiconductor", "gpu",
+    # 🔥 Technology (India-impacting)
     "data breach", "cyberattack", "hacked",
-    "server outage",
+    "server outage", "semiconductor",
 
-    # 🔥 Transport / Energy / Infra
+    # 🔥 Transport / Energy / Infra (India)
     "aviation", "plane crash", "airlines",
-    "power grid", "coal", "renewable",
-    "pipeline explosion", "factory fire",
+    "power grid", "coal india", "renewable energy",
 
-    # 🔥 Misc big-impact
-    "covid", "pandemic", "variant",
-    "natural disaster", "earthquake", "tsunami",
+    # 🔥 Disasters (India-relevant)
+    "earthquake", "tsunami", "cyclone", "flood",
 ]
 
 
@@ -125,17 +111,39 @@ IGNORED_KEYWORDS = [
 ]
 
 
-def is_market_impacting(title: str) -> bool:
-    title = title.lower()
+# India-related terms - article should mention India to be relevant
+INDIA_CONTEXT = [
+    "india", "indian", "rbi", "sebi", "rupee", "nifty", "sensex", "bse", "nse",
+    "mumbai", "delhi", "bangalore", "bengaluru", "hyderabad", "chennai",
+    "gujarat", "maharashtra", "modi", "government of india", "ministry",
+    "tata", "reliance", "infosys", "wipro", "hdfc", "icici", "sbi",
+    "adani", "bajaj", "mahindra", "ola", "zomato", "paytm", "flipkart",
+    "gnews_", "newsdata_", "newsapi_", "worldnews_india", "hindustan_times",
+    "times_of_india", "livemint", "financial_express", "india_today",
 
-    # Ignore junk
+    # Global but India-impacting
+    "us tariff", "us fed", "us sanctions", "us rate",
+    "oil price", "brent", "opec", "gold", "dollar",
+]
+
+
+def is_market_impacting(title: str, source: str = "") -> bool:
+    title_lower = title.lower()
+    source_lower = source.lower()
+
+    # Always ignore junk
     for w in IGNORED_KEYWORDS:
-        if w in title:
+        if w in title_lower:
             return False
 
-    # Allow market-impacting news
-    for w in IMPORTANT_KEYWORDS:
-        if w in title:
-            return True
+    # Check if passes keyword filter
+    passes_keyword = any(w in title_lower for w in IMPORTANT_KEYWORDS)
+    if not passes_keyword:
+        return False
 
-    return False
+    # Check India relevance (title OR source must be India-related)
+    india_relevant = any(ctx in title_lower or ctx in source_lower for ctx in INDIA_CONTEXT)
+    if not india_relevant:
+        return False
+
+    return True

@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from keyword_extractor.extractor import extract_keywords, SYMBOLS
+from keyword_extractor.classifier import classify_event_type, calculate_severity
+from keyword_extractor.sentiment import analyze_sentiment
 import sys
 sys.path.append('/app')
 from libs.article_scraper import scrape_article
@@ -44,6 +46,11 @@ def get_keywords(headline: str, url: str = None, source: str = None):
     companies = [kw for kw in all_keywords if kw.lower() in SYMBOLS]
     keywords = [kw for kw in all_keywords if kw.lower() not in SYMBOLS]
     
+    # Analyze sentiment and classify event
+    sentiment = analyze_sentiment(headline, article_content)
+    event_type = classify_event_type(headline, article_content)
+    severity = calculate_severity(event_type, sentiment['raw_score'], len(all_keywords))
+    
     return {
         "headline": headline,
         "url": url,
@@ -52,5 +59,10 @@ def get_keywords(headline: str, url: str = None, source: str = None):
             "all_keywords": all_keywords,
             "companies": companies,
             "keywords": keywords
+        },
+        "analysis": {
+            "event_type": event_type,
+            "sentiment": sentiment,
+            "severity": severity
         }
     }

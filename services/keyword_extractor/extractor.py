@@ -74,7 +74,21 @@ def extract_keywords(headline: str, content: str = None):
     # Check if article is business/finance related
     business_keywords = {'bank', 'stock', 'shares', 'market', 'profit', 'revenue', 'earnings', 
                         'quarter', 'financial', 'investment', 'trading', 'equity', 'dividend',
-                        'ipo', 'merger', 'acquisition', 'nifty', 'sensex', 'bse', 'nse'}
+                        'ipo', 'merger', 'acquisition', 'nifty', 'sensex', 'bse', 'nse',
+                        # Major Indian companies - always run company detection for these
+                        'reliance', 'tata', 'infosys', 'wipro', 'hdfc', 'icici', 'sbi', 'kotak',
+                        'adani', 'bajaj', 'mahindra', 'larsen', 'toubro', 'l&t', 'hcl', 'tech mahindra',
+                        'ola', 'zomato', 'paytm', 'flipkart', 'byju', 'swiggy', 'ola electric',
+                        'airtel', 'jio', 'vodafone', 'bsnl', 'tcs', 'accenture',
+                        'indigo', 'air india', 'spicejet', 'go first',
+                        'hindustan unilever', 'hul', 'itc', 'nestle', 'dabur', 'marico',
+                        'asian paints', 'berger', 'pidilite', 'dr reddy', 'sun pharma', 'cipla',
+                        'coal india', 'ongc', 'ntpc', 'power grid', 'bhel', 'bpcl', 'hpcl', 'ioc',
+                        'grasim', 'ultratech', 'shree cement', 'acc', 'ambuja',
+                        'naukri', 'info edge', 'policybazaar', 'indiamart',
+                        # Finance terms
+                        'listing', 'delisting', 'fundraise', 'valuation', 'stake', 'buyback',
+                        'results', 'fraud', 'scam', 'probe', 'layoffs', 'ceo', 'cfo'}
     
     text_lower = text_to_analyze.lower()
     is_business_news = any(keyword in text_lower for keyword in business_keywords)

@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+requests
+yfinance
+numpy
+pandas
+lightgbm
+prophet
+qdrant-client
+fastembed
+arch
+scikit-learn
+sentence-transformers
+torch
+psycopg2-binary

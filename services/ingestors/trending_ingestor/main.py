@@ -94,7 +94,7 @@ def run():
         print(f"   After dedup: {len(unique_items)}")
 
         # ---- Filter for ONLY strong market-impact news ----
-        final_items = [item for item in unique_items if is_market_impacting(item["title"])]
+        final_items = [item for item in unique_items if is_market_impacting(item["title"], item.get("source", ""))]
         print(f"   After market filter: {len(final_items)}")
 
         # ---- Publish to Kafka ----

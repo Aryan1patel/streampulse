@@ -36,7 +36,7 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: streampulse
     ports:
-      - "5433:5432"
+      - "5435:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U user" ]
       interval: 5s
