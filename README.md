@@ -1,5 +1,3 @@
-<img width="1707" height="983" alt="Screenshot 2026-03-06 at 11 00 26 PM" src="https://github.com/user-attachments/assets/2b35e63c-0108-4f43-b069-a7a74d438541" /><div align="center">
-
 # ⚡ StreamPulse
 
 **Real-time news trend analysis & market impact visualization**
@@ -20,14 +18,16 @@ StreamPulse is a **production-style streaming data platform** that ingests trend
 
 ## 📸 Preview
 
-<!-- Drop your screenshot here once the app is running! -->
-<img width="1707" height="983" alt="Screenshot 2026-03-06 at 11 00 26 PM" src="https://github.com/user-attachments/assets/190da523-19fc-44db-887a-16801a4529ee" />
-<img width="1707" height="983" alt="Screenshot 2026-03-06 at 10 59 31 PM" src="https://github.com/user-attachments/assets/236a9780-94c1-419f-973b-684b3f5082a5" />
-<img width="1707" height="1057" alt="Screenshot 2026-03-06 at 10 59 15 PM" src="https://github.com/user-attachments/assets/e2e2068b-f1a9-460e-b8ff-edfc78c2a23f" />
-<img width="1707" height="983" alt="Screenshot 2026-03-06 at 10 59 31 PM" src="https://github.com/user-attachments/assets/eb9beb2b-60bc-47a7-9066-1291a77a8056" />
-
-<img width="1710" height="988" alt="Screenshot 2026-03-06 at 10 59 49 PM" src="https://github.com/user-attachments/assets/b5027fbd-f49a-4754-80d9-cf5c5fd3fe5d" />
-
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/190da523-19fc-44db-887a-16801a4529ee" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/236a9780-94c1-419f-973b-684b3f5082a5" width="100%"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/e2e2068b-f1a9-460e-b8ff-edfc78c2a23f" width="100%"/></td>
+    <td><img src="https://github.com/user-attachments/assets/eb9beb2b-60bc-47a7-9066-1291a77a8056" width="100%"/></td>
+  </tr>
+</table>
 
 <!-- Uncomment and update the path when you have a screenshot:
 ![StreamPulse Dashboard](./docs/screenshot.png)
