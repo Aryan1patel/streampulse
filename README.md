@@ -26,8 +26,7 @@ StreamPulse is a **production-style streaming data platform** that ingests trend
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/e2e2068b-f1a9-460e-b8ff-edfc78c2a23f" width="100%"/></td>
-    <td><img width="1710" height="984" alt="image" src="https://github.com/user-attachments/assets/eb3bc62d-7ce0-4c77-b990-136b3a347b59" />
-</td>
+    <td><img width="1710" height="984" alt="Screenshot 2026-03-06 at 11 10 12 PM" src="https://github.com/user-attachments/assets/b48f290b-0138-47f1-a84b-3e3203b6d4e9" /></td>
   </tr>
 </table>
 
